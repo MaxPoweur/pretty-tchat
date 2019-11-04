@@ -12,7 +12,13 @@ const mixin = {
         currentTheme() {
             let currentTheme = this.$store.state.theme;
             return currentTheme==null ? themes[0] : currentTheme;
-        }
+        },
+        currentThemeObject() {
+            return this.getTheme(this.currentTheme);
+        },
+        primaryColor() {
+            return this.currentThemeObject['--secondary-color'];
+        },
     },
     created() {
         this.setTheme(this.currentTheme);

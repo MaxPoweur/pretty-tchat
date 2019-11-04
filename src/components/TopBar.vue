@@ -20,7 +20,7 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import ThemeMixin from '@mixins/ThemeMixin.js';
+// import ThemeMixin from '@mixins/ThemeMixin.js';
 export default {
     computed: {
         ...mapGetters([
@@ -33,7 +33,6 @@ export default {
             'logout'
         ])
     },
-    mixins: [ThemeMixin],
     updated() {
         console.log('update')
     }
