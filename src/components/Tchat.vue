@@ -47,7 +47,12 @@
                 </div>
             </div>
         </div>
-        <div id="input-message"></div>
+        <div id="input-message" class="box-shadow">
+            <textarea></textarea>
+            <div id="submit-container">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -80,11 +85,10 @@ export default {
             flex-direction: column;
             padding: 25px;
             overflow: auto;
-            flex: 1;
+            flex: 4;
             .message {
                 display: flex;
                 margin-bottom: 2em;
-                // border-bottom: 1px dashed var(--secondary-color-reverse);
                 .content {
                     @extend .box-shadow;
                     margin: 0;
@@ -103,11 +107,6 @@ export default {
                     align-items: center;
                     font-size: 25px;
                     padding: 15px;
-                    // margin-top:20px;
-                    // margin-bottom: 20px;
-                    // font-weight: bold;
-                    // font-style: italic;
-                    // font-size: 10px;
                     flex: 1;
                     transition: 1s;
                     background-color: rgba(0, 0, 0, 0.05);
@@ -121,11 +120,49 @@ export default {
             }
         }
         #input-message {
-            // position: fixed;
-            bottom: 0;
-            height: 100px;
             width: 100%;
-            background-color: red;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            textarea {
+                width: 100%;
+                border: none;
+                overflow: auto;
+                outline: none;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                resize: none;
+                padding: 10px;
+                min-height: 100px;
+                color: var(--secondary-color);
+                background-color: var(--secondary-color-reverse);
+                font-family: "Avenir", Helvetica, Arial, sans-serif;
+            }
+            #submit-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                background-color: red;
+                color: var(--secondary-color-reverse);
+                background-color: var(--secondary-color);
+                text-align: center;
+                padding: 10px;
+                font-size: 30px;
+                flex: 1;
+                cursor: pointer;
+                transition: 0.5s;
+                &:hover {
+                    background-color: var(--secondary-color-hover);
+                }
+                i {
+                    transition: 0.5s;
+                    &:hover {
+                        margin-left:10px;
+                    }
+                }
+            }
         }
     }
 </style>

@@ -47,9 +47,20 @@ body {
         color: var(--primary-color-reverse);
         display: flex;
         flex-direction: column;
-    }
-    ::selection {
-        color: var(--secondary-color-reverse);background: var(--secondary-color);
+        * {
+            box-sizing: border-box;
+        }
+        ::selection {
+            color: var(--secondary-color-reverse);
+            background: var(--secondary-color);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: var(--secondary-color);
+        }
     }
 }
 </style>
