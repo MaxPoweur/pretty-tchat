@@ -1,0 +1,35 @@
+export default [
+    {
+        "name"                     : "light",
+        "--primary-color"          : "#fcfafa",
+        "--primary-color-hover"    : "#b50000",
+        "--primary-color-reverse"  : "#635353",
+        "--secondary-color"        : "#635353",
+        "--secondary-color-hover"  : "#403232",
+        "--secondary-color-reverse": "white",
+        "--thirth-color"           : "white",
+        "--thirth-color-reverse"   : "#635353",
+    },
+    {
+        "name"                     : "solar",
+        "--primary-color"          : "#FFA500",
+        "--primary-color-hover"    : "#b50000",
+        "--primary-color-reverse"  : "white",
+        "--secondary-color"        : "#d15b00",
+        "--secondary-color-hover"  : "#d42020",
+        "--secondary-color-reverse": "white",
+        "--thirth-color"           : "white",
+        "--thirth-color-reverse"   : "#d12e2e",
+    },
+    {
+        "name"                     : "sky",
+        "--primary-color"          : "#89c5d6",
+        "--primary-color-hover"    : "#b50000",
+        "--primary-color-reverse"  : "white",
+        "--secondary-color"        : "#3f8599",
+        "--secondary-color-hover"  : "#286070",
+        "--secondary-color-reverse": "white",
+        "--thirth-color"           : "white",
+        "--thirth-color-reverse"   : "#3f8599",
+    }
+]
