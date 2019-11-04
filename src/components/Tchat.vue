@@ -1,55 +1,53 @@
 <template>
     <div id="tchat">
-        <div id="loading">
+        <!-- <div v-if="$apollo.queries.users.loading" id="loading">
             <RippleLoader :color="primaryColor"/>
-        </div>
-        <!-- <div v-else id="messages">
-            <div class="message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div>
-            <div class="message own-message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div>
-            <div class="message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div>
-            <div class="message own-message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div>
-            <div class="message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div>
         </div> -->
+        <div id="messages">
+            <div class="message" v-for="message in messages" :key="message.id">
+                <p class="content">{{message.content}}</p>
+                <div class="details">
+                    <span class="author">{{message.user.username}}</span>
+                    <!-- <span class="date">{{message.created_at}}</span> -->
+                </div>
+            </div>
+            <!-- <div class="message own-message">
+                <p
+                    class="content"
+                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                <div class="details">
+                    <span class="author">Adam Rotard</span>
+                    <span class="date">23:10</span>
+                </div>
+            </div>
+            <div class="message">
+                <p
+                    class="content"
+                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                <div class="details">
+                    <span class="author">Adam Rotard</span>
+                    <span class="date">23:10</span>
+                </div>
+            </div>
+            <div class="message own-message">
+                <p
+                    class="content"
+                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                <div class="details">
+                    <span class="author">Adam Rotard</span>
+                    <span class="date">23:10</span>
+                </div>
+            </div>
+            <div class="message">
+                <p
+                    class="content"
+                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                <div class="details">
+                    <span class="author">Adam Rotard</span>
+                    <span class="date">23:10</span>
+                </div>
+            </div> -->
+        </div>
         <div id="input-message" class="box-shadow">
             <textarea placeholder="Hello world !"></textarea>
             <div id="submit-container">
@@ -65,13 +63,19 @@ import ThemeMixin from '@mixins/ThemeMixin.js';
 import gql from 'graphql-tag';
 import { RippleLoader } from 'vue-spinners-css';
 
-const query = gql`
-    query MyQuery {
-        users {
-            username
-            updated_at
-            id
+const subscription = gql`
+    subscription MySubscription {
+        messages {
+            user {
+                id
+                created_at
+                updated_at
+                username
+            }
+            content
             created_at
+            id
+            updated_at
         }
     }
 `;
@@ -79,7 +83,7 @@ const query = gql`
 export default {
     data() {
         return {
-            users: [],
+            messages: [],
         }
     },
     computed: {
@@ -91,16 +95,25 @@ export default {
     methods: {
     },
     components: {
-        RippleLoader,
+        // RippleLoader,
     },
     apollo: {
-        users: {
-            query,
+        $subscribe: {
+            messages: {
+                query: subscription,
+                result(result) {
+                    this.messages = result.data.messages;
+                },
+                error(error) {
+                    console.log(error)
+                }
+            },
         },
     },
     updated() {
     },
     mounted() {
+        console.log(this.$apollo.queries.users)
     }
 }
 </script>
