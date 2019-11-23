@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <!-- <h1 v-if="logged" id="username">{{username}}</h1> -->
+        <h1 v-if="logged" id="username">{{userData.username}}</h1>
         <div id="menu">
             <span id="logout" v-if="logged" @click="logout"><i class="fas fa-power-off"></i></span>
         </div>
@@ -24,7 +24,7 @@ import { mapMutations, mapGetters } from 'vuex';
 export default {
     computed: {
         ...mapGetters([
-            'username',
+            'userData',
             'logged'
         ])
     },

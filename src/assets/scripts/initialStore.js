@@ -3,23 +3,23 @@ import createPersistedState from 'vuex-persistedstate';
 
 export default {
     state: {
-        username: null,
+        userData: null,
         theme: null
     },
     getters: {
-        username: (state, getters) => {
-            return state.username;
+        userData: (state, getters) => {
+            return state.userData;
         },
         logged: (state, getters) => {
-            return getters.username != null;
+            return getters.userData != null;
         }
     },
     mutations: {
-        [LOGIN]: (state, username) => {
-            state.username = username;
+        [LOGIN]: (state, userData) => {
+            state.userData = userData;
         },
         [LOGOUT]: state => {
-            state.username = null;
+            state.userData = null;
         },
         setTheme: (state, {name}) => {
             state.theme = name;

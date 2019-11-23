@@ -1,56 +1,25 @@
 <template>
     <div id="tchat">
-        <!-- <div v-if="$apollo.queries.users.loading" id="loading">
-            <RippleLoader :color="primaryColor"/>
-        </div> -->
         <div id="messages">
-            <div class="message" v-for="message in messages" :key="message.id">
-                <p class="content">{{message.content}}</p>
+            <div id="loading" v-if="!loaded">
+                <RippleLoader :color="primaryColor"/>
+            </div>
+            <div v-else class="message" :class="{'own-message':message.user.id==userData.id}" v-for="message in messages" :key="message.id">
                 <div class="details">
                     <span class="author">{{message.user.username}}</span>
-                    <!-- <span class="date">{{message.created_at}}</span> -->
+                    <span class="time">{{message.created_at.toLocaleTimeString()}}</span>
+                    <span class="date">{{message.created_at.toLocaleDateString()}}</span>
+                </div>
+                <div class="content">
+                    <div class="start-message"><i class="fas fa-quote-left"></i></div>
+                    <p>{{message.content}}</p>
+                    <div class="end-message"><i class="fas fa-quote-right"></i></div>
                 </div>
             </div>
-            <!-- <div class="message own-message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div>
-            <div class="message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div>
-            <div class="message own-message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div>
-            <div class="message">
-                <p
-                    class="content"
-                >Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <div class="details">
-                    <span class="author">Adam Rotard</span>
-                    <span class="date">23:10</span>
-                </div>
-            </div> -->
         </div>
         <div id="input-message" class="box-shadow">
-            <textarea placeholder="Hello world !"></textarea>
-            <div id="submit-container">
+            <textarea placeholder="Hello world !" v-model="message"></textarea>
+            <div id="submit-container" @click="addMessage">
                 <i class="fas fa-arrow-right"></i>
             </div>
         </div>
@@ -63,8 +32,15 @@ import ThemeMixin from '@mixins/ThemeMixin.js';
 import gql from 'graphql-tag';
 import { RippleLoader } from 'vue-spinners-css';
 
-const subscription = gql`
-    subscription MySubscription {
+const graphql = {
+    addMessage: gql`mutation AddMessage($author: uuid!, $content: String!) {
+        insert_messages(objects: {author: $author, content: $content}) {
+            returning {
+                id
+            }
+        }
+    }`,
+    messages: gql`subscription GetMessages {
         messages {
             user {
                 id
@@ -77,43 +53,119 @@ const subscription = gql`
             id
             updated_at
         }
-    }
-`;
+    }`
+}
 
 export default {
     data() {
         return {
+            message: "",
             messages: [],
+            loaded: false
         }
     },
     computed: {
         ...mapGetters([
-            'username',
+            'userData',
             'logged'
         ]),
     },
     methods: {
+        updateMessages(messages) {
+            this.messages = messages.map(message=>{
+                message.created_at = new Date(Date.parse(message.created_at));
+                return message;
+            });
+            this.scrollBottom();
+        },
+        addMessage() {
+            if(this.message.trim().length==0) {
+                return;
+            }
+            this.$apollo.mutate({
+                mutation: graphql.addMessage,
+                variables: {
+                    author: this.userData.id,
+                    content: this.message
+                },
+            });
+            this.message = "";
+        },
+        observeMessages() {
+            var messages = document.querySelector('#messages');
+            var observer = new MutationObserver(this.scrollBottom);
+            var config = {childList: true};
+            observer.observe(messages, config);
+        },
+        scrollBottom() {
+            this.animateScroll(300);
+            // var container = document.querySelector("#messages");
+            // container.scrollTop = container.scrollHeight;
+        },
+        animateScroll(duration)  {
+            var messages = document.querySelector('#messages');
+            var start = messages.scrollTop;
+            var end = messages.scrollHeight;
+            var change = end - start;
+            var increment = 20;
+            function easeInOut(currentTime, start, change, duration) {
+                // by Robert Penner
+                currentTime /= duration / 2;
+                if (currentTime < 1) {
+                return change / 2 * currentTime * currentTime + start;
+                }
+                currentTime -= 1;
+                return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
+            }
+            function animate(elapsedTime) {
+                elapsedTime += increment;
+                var position = easeInOut(elapsedTime, start, change, duration);
+                messages.scrollTop = position;
+                if (elapsedTime < duration) {
+                setTimeout(function() {
+                    animate(elapsedTime);
+                }, increment)
+                }
+            }
+            animate(0);
+        }
     },
     components: {
-        // RippleLoader,
+        RippleLoader,
     },
     apollo: {
         $subscribe: {
             messages: {
-                query: subscription,
+                query: graphql.messages,
                 result(result) {
-                    this.messages = result.data.messages;
+                    this.updateMessages(result.data.messages);
+                    this.loaded = true;
                 },
                 error(error) {
-                    console.log(error)
+                    console.log('error:', error);
                 }
-            },
+            }
         },
+        $mutation: {
+            addMessage: {
+                query: graphql.addMessage,
+                variables: {
+                    author: "",
+                    content: ""
+                },
+                result(result) {
+                    this.updateMessages(result.data.messages);
+                },
+                error(error) {
+                    console.log('error:', error);
+                }
+            }
+        }
     },
-    updated() {
+    created() {
     },
     mounted() {
-        console.log(this.$apollo.queries.users)
+        this.observeMessages();
     }
 }
 </script>
@@ -145,10 +197,26 @@ export default {
                 color: var(--secondary-color);
                 background-color: var(--secondary-color-reverse);
                 opacity: 0.9;
-                padding: 30px 20px;
+                padding: 35px 25px;
                 text-align: justify;
                 flex: 4;
                 transition: 1s;
+                position: relative;
+                .start-message {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    font-size: 30px;
+                }
+                .end-message {
+                    position: absolute;
+                    bottom: 10px;
+                    right: 10px;
+                    font-size: 30px;
+                }
+                p {
+                    font-style: italic;
+                }
             }
             .details {
                 display: flex;
@@ -162,6 +230,12 @@ export default {
                 background-color: rgba(0, 0, 0, 0.05);
                 .author {
                     margin-bottom: 15px;
+                }
+                .time {
+                    font-size: 16px;
+                }
+                .date {
+                    font-size: 14px;
                 }
             }
             &.own-message {
