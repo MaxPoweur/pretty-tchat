@@ -17,7 +17,7 @@ Vue.use(Vuex);
 Vue.use(VueApollo);
 
 const wsLink = new WebSocketLink({
-    uri: `ws://adam-test-hasura.herokuapp.com/v1/graphql`,
+    uri: `wss://adam-test-hasura.herokuapp.com/v1/graphql`,
     options: {
         timeout: 60000,
         reconnect: true
