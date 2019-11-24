@@ -2,7 +2,7 @@
     <div id="tchat">
         <div id="messages">
             <div id="loading" v-if="!loaded">
-                <RippleLoader :color="primaryColor"/>
+                <RippleLoader :color="secondaryColor"/>
             </div>
             <div v-else class="message" :class="{'own-message':message.user.id==userData.id}" v-for="message in messages" :key="message.id">
                 <div class="details">
@@ -28,7 +28,6 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import ThemeMixin from '@mixins/ThemeMixin.js';
 import gql from 'graphql-tag';
 import { RippleLoader } from 'vue-spinners-css';
 

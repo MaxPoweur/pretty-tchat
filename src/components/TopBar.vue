@@ -5,7 +5,7 @@
                 <div class="theme-option box-shadow"
                     v-if="theme.name!=currentTheme"
                     :style="{backgroundColor:theme['--primary-color'], color: theme['--primary-color-reverse'], borderColor: theme['--primary-color-reverse']}"
-                    @click="setTheme(theme.name)"
+                    @click="setTheme(theme)"
                 >
                     {{theme.name}}
                 </div>
@@ -20,7 +20,6 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-// import ThemeMixin from '@mixins/ThemeMixin.js';
 export default {
     computed: {
         ...mapGetters([
@@ -41,17 +40,12 @@ export default {
 
 <style scoped lang="scss">
     #topbar {
-        // position: fixed;
-        // bottom: 0;
-        // background-color: var(--thirth-color);
-        // opacity: 0.9;
         transition: 1s;
         display: flex;
         justify-content: space-between;
         align-items: center;
         color: var(--secondary-color);
         height: $topbarHeight;
-        // width: 100%;
         padding:0 50px;
         h1#username {
             font-family: 'Montserrat'; // TODO : Display only when font loads ?

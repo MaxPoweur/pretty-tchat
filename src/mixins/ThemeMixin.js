@@ -13,24 +13,16 @@ const mixin = {
             let currentTheme = this.$store.state.theme;
             return currentTheme==null ? themes[0] : currentTheme;
         },
-        currentThemeObject() {
-            return this.getTheme(this.currentTheme);
-        },
-        primaryColor() {
-            return this.currentThemeObject['--secondary-color'];
+        secondaryColor() {
+            return this.currentTheme['--secondary-color'];
         },
     },
-    created() {
+    mounted() {
         this.setTheme(this.currentTheme);
-        this.themeUpdateEventListener();
     },
     methods: {
-        setTheme(name) {
-            if(!this.themeExists(name)) {
-                return;
-            }
-            let theme = this.getTheme(name);
-            this.$store.commit('setTheme', {name});
+        setTheme(theme) {
+            this.$store.commit('setTheme', {theme});
             for (const [key, value] of Object.entries(theme)) {
                 if(key==nameKey) {
                     continue;
@@ -51,17 +43,6 @@ const mixin = {
         setCssPropery(key, value) {
             let root = document.documentElement;
             root.style.setProperty(key, value);
-        },
-        themeUpdateEventListener() {
-            document.onkeydown = event => {
-                if (event.keyCode == 96 && event.altKey) {
-                    this.setTheme('default');
-                } else if (event.keyCode == 97 && event.altKey) {
-                    this.setTheme('theme1');
-                } else if (event.keyCode == 98 && event.altKey) {
-                    this.setTheme('theme2');
-                }
-            };
         }
     }
 };

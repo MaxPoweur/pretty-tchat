@@ -21,8 +21,8 @@ export default {
         [LOGOUT]: state => {
             state.userData = null;
         },
-        setTheme: (state, {name}) => {
-            state.theme = name;
+        setTheme: (state, {theme}) => {
+            state.theme = theme;
         }
     },
     plugins: [createPersistedState()]
