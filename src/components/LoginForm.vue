@@ -4,7 +4,7 @@
             <img alt="Vue logo" src="@images/logo.png">
             <h1>Viens tchatter avec nous !</h1>
             <form class="box-shadow">
-                <input name="username" type="text" id="tmp" v-model="username" @keyup.enter="onLogin" />
+                <input name="username" type="text" id="tmp" v-model.trim="username" @keyup.enter="onLogin" />
                 <input type="submit" value="GO" @click.prevent="onLogin" />
             </form>
         </div>
@@ -26,6 +26,9 @@ export default {
             'login'
         ]),
         onLogin() {
+            if(this.username.length<3) {
+                return;
+            }
             this.$apollo.query({
                 query: gql`query SearchUser($username: String!) {
                     users(where: {username: {_eq: $username}}) {
