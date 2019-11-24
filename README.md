@@ -30,7 +30,7 @@ npm run serve
 ```
 npm run build
 ```
-> Sources will be in the /dist directory. Just run the index.html file to use the tchat
+> You can find the sources in the **/dist** folder. You will then just have to navigate to the index.html file to be able to use the chat
 
 ## Live Demo
 
